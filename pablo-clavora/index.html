@@ -33,7 +33,7 @@ ul.cli{columns:2;font-size:12px;margin:6px 0;padding-left:18px}ul.cli li{margin:
 
 <div class='card'><h2>2. Score mensual</h2>
 <div class='row' style='align-items:center'>
-<div class='scorebox' style='margin:0'><div class='n' style='color:#16a34a'>85.2 <span style='font-size:20px;color:#64748b'>/ 100</span></div><div class='small'>Petronas 55 &middot; Filtros 25 &middot; MM3 10 &middot; Cli. nuevos 10</div></div>
+<div class='scorebox' style='margin:0'><div class='n' style='color:#16a34a'>71.2 <span style='font-size:20px;color:#64748b'>/ 100</span></div><div class='small'>Petronas 55 &middot; Filtros 25 &middot; MM3 10 &middot; Cli. nuevos 10</div></div>
 <div class='chart-wrap' style='height:300px'><canvas id='radar'></canvas></div>
 </div>
 <div class='small' style='margin-top:8px'>Radar = % de cada categor&iacute;a sobre su m&aacute;ximo. Cuanto m&aacute;s llena la telara&ntilde;a, mejor el desempe&ntilde;o general.</div></div>
@@ -62,10 +62,10 @@ ul.cli{columns:2;font-size:12px;margin:6px 0;padding-left:18px}ul.cli li{margin:
 <div class='card'><h2>9. Mix de productos</h2><div class='chart-wrap'><canvas id='mix'></canvas></div></div>
 </div>
 
-<div class='footer'>Generado 22/05/2026 17:09 &middot; Lubricantes Alvear</div>
+<div class='footer'>Generado 22/05/2026 17:22 &middot; Lubricantes Alvear</div>
 <script>
 const md=[{label:'PETRONAS',value:60752777},{label:'MM3',value:18102696},{label:'ADITIVOS',value:1986714},{label:'FILTROS',value:1159117},{label:'BOMBAS',value:40598},{label:'KITDIST',value:22448}];
-const sd=[{eje:'Petronas',val:100},{eje:'Filtros',val:81},{eje:'MM3',val:100},{eje:'Clientes nuevos',val:0}];
+const sd=[{eje:'Petronas',val:100},{eje:'Filtros',val:81},{eje:'Industriales',val:100},{eje:'Sprinta',val:7},{eje:'MM3',val:100},{eje:'Clientes nuevos',val:0}];
 const pd=[{m:'Litros Petronas',pct:74,real:'11.804 L'},{m:'Fact. Petronas',pct:93,real:'$60.752.777'},{m:'Litros MM3',pct:120,real:'27.560 L'},{m:'Fact. MM3',pct:122,real:'$18.102.696'},{m:'Filtros (u)',pct:40,real:'101 u'},{m:'Aditivos (u)',pct:52,real:'94 u'},{m:'Facturacion Total',pct:101,real:'$85.838.798'},{m:'Clientes con compra',pct:142,real:'85'}];
 const COL=p=>p>=50?'#16a34a':(p>=35?'#f59e0b':'#dc2626');
 Chart.register(ChartDataLabels);
@@ -73,7 +73,7 @@ Chart.register(ChartDataLabels);
 new Chart(document.getElementById('mix'),{type:'doughnut',data:{labels:md.map(x=>x.label),datasets:[{data:md.map(x=>x.value),backgroundColor:['#0ea5e9','#10b981','#f59e0b','#8b5cf6','#ef4444','#14b8a6','#f97316','#64748b']}]},options:{plugins:{legend:{position:'right',labels:{font:{size:12}}},tooltip:{callbacks:{label:c=>c.label+': $'+c.parsed.toLocaleString('es-AR')}},datalabels:{display:false}},maintainAspectRatio:false}});
 // Radar score
 new Chart(document.getElementById('radar'),{type:'radar',data:{labels:sd.map(x=>x.eje),datasets:[{label:'% del maximo',data:sd.map(x=>x.val),backgroundColor:'rgba(14,165,233,.25)',borderColor:'#0ea5e9',borderWidth:2,pointBackgroundColor:'#0ea5e9'}]},options:{plugins:{legend:{display:false},datalabels:{display:false}},scales:{r:{min:0,max:100,ticks:{stepSize:25,font:{size:10}},pointLabels:{font:{size:12,weight:'bold'}}}},maintainAspectRatio:false}});
-// Barras progreso vs objetivo â€” etiquetas adentro
-new Chart(document.getElementById('prog'),{type:'bar',data:{labels:pd.map(x=>x.m),datasets:[{data:pd.map(x=>x.pct),backgroundColor:pd.map(x=>COL(x.pct)),borderRadius:4}]},options:{indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.x+'% del objetivo mensual'}},datalabels:{anchor:'start',align:'end',color:'#fff',font:{weight:'bold',size:12},formatter:(val,ctx)=>pd[ctx.dataIndex].pct+'%   |   '+pd[ctx.dataIndex].real,clamp:true,padding:{left:8}}},scales:{x:{max:100,grid:{color:c=>c.tick.value===50?'#94a3b8':'#e5e7eb'},ticks:{callback:v=>v+'%',stepSize:25}}},maintainAspectRatio:false}});
+// Barras progreso vs objetivo â€” barras capeadas en 100, etiqueta muestra % real
+new Chart(document.getElementById('prog'),{type:'bar',data:{labels:pd.map(x=>x.m),datasets:[{data:pd.map(x=>Math.min(x.pct,100)),backgroundColor:pd.map(x=>COL(x.pct)),borderRadius:4}]},options:{indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>pd[c.dataIndex].pct+'% del objetivo mensual'}},datalabels:{anchor:'start',align:'end',color:'#fff',font:{weight:'bold',size:12},formatter:(val,ctx)=>pd[ctx.dataIndex].pct+'%   |   '+pd[ctx.dataIndex].real,clamp:true,padding:{left:8}}},scales:{x:{max:100,grid:{color:c=>c.tick.value===50?'#94a3b8':'#e5e7eb'},ticks:{callback:v=>v+'%',stepSize:25}}},maintainAspectRatio:false}});
 </script>
 </body></html>
